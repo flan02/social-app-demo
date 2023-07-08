@@ -12,11 +12,12 @@ export default withApiAuthRequired(async function handler(req, res) {
   };
   const fetchBody = {
     dataSource: process.env.MONGODB_DATA_SOURCE,
-    database: "social_butterfly",
+    database: "socialmedia",
     collection: "flutters",
   };
-  const baseUrl = `${process.env.MONGODB_DATA_API_URL}/action`;
 
+  //const baseUrl = `https://sa-east-1.aws.data.mongodb-api.com/app/data-ipfrx/endpoint/data/v1/action`;
+  const baseUrl = `${process.env.MONGODB_DATA_API_URL}/action`;
   try {
     switch (req.method) {
       case "GET":

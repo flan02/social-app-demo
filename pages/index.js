@@ -15,14 +15,12 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const getUser = await fetch("/api/user");
+      const getUser = await fetch("/api/user"); //! This is the problem
       const getUserJson = await getUser.json();
       setUser(getUserJson);
-
-      const getFlutters = await fetch("/api/flutter");
+      const getFlutters = await fetch("/api/flutter"); //! This is the problem
       const getFluttersJson = await getFlutters.json();
       setFlutters(getFluttersJson);
-
       setIsLoading(false);
     })();
   }, []);

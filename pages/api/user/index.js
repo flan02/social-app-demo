@@ -7,10 +7,10 @@ import {
 export default withApiAuthRequired(async function handler(req, res) {
   try {
     const { accessToken } = await getAccessToken(req, res);
-    const { user } = await getSession(req, res);
+    const { user } = getSession(req, res);
 
+    //const baseUrl = `https://sa-east-1.aws.data.mongodb-api.com/app/data-ipfrx/endpoint/data/v1/action`;
     const baseUrl = `${process.env.MONGODB_DATA_API_URL}/action`;
-
     switch (req.method) {
       case "GET":
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -23,13 +23,12 @@ export default withApiAuthRequired(async function handler(req, res) {
           },
           body: JSON.stringify({
             dataSource: process.env.MONGODB_DATA_SOURCE,
-            database: "social_butterfly",
+            database: "socialmedia",
             collection: "users",
           }),
         });
 
         const readDataJson = await readData.json();
-
         if (!readDataJson.document.email) {
           await fetch(`${baseUrl}/updateOne`, {
             method: "POST",
@@ -40,13 +39,13 @@ export default withApiAuthRequired(async function handler(req, res) {
             },
             body: JSON.stringify({
               dataSource: process.env.MONGODB_DATA_SOURCE,
-              database: "social_butterfly",
+              database: "socialmedia",
               collection: "users",
               filter: { _id: { $oid: readDataJson.document._id } },
               update: {
                 $set: {
-                  email: user.email,
                   name: user.name,
+                  email: user.email,
                   picture: user.picture,
                   nickname: user.nickname,
                 },
@@ -55,8 +54,8 @@ export default withApiAuthRequired(async function handler(req, res) {
           });
           readDataJson.document = {
             ...readDataJson.document,
-            email: user.email,
             name: user.name,
+            email: user.email,
             picture: user.picture,
             nickname: user.nickname,
           };
@@ -74,7 +73,7 @@ export default withApiAuthRequired(async function handler(req, res) {
           },
           body: JSON.stringify({
             dataSource: process.env.MONGODB_DATA_SOURCE,
-            database: "social_butterfly",
+            database: "socialmedia",
             collection: "users",
             filter: { _id: { $oid: req.body._id } },
             update: {
